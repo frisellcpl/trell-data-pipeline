@@ -1,4 +1,4 @@
-__version__ = '0.1'
+__version__ = '0.1.1'
 
 import asyncio
 from typing import Optional
@@ -51,7 +51,7 @@ def init_logging() -> None:
 
         # debug file
         debug_file = logging.handlers.RotatingFileHandler(
-            filename=log_dir / 'trell_lora_pipeline.debug.log',
+            filename=log_dir / 'trell-data-pipeline.debug.log',
             maxBytes=5 * 1000 * 1000,
             backupCount=2,
         )
@@ -73,9 +73,9 @@ def init_logging() -> None:
     asyncio_logger = logging.getLogger('asyncio')
     asyncio_logger.setLevel(logging.WARNING)
 
-    # disable hbmqtt debug log
-    hbmqtt_logger = logging.getLogger('hbmqtt')
-    hbmqtt_logger.setLevel(logging.WARNING)
+    # disable gmqtt debug log
+    gmqtt_logger = logging.getLogger('gmqtt')
+    gmqtt_logger.setLevel(logging.WARNING)
 
     # disable transitions debug log
     transitions_logger = logging.getLogger('transitions')

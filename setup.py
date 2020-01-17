@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 from setuptools import find_packages, setup
+from pipeline import __version__
 
 setup(
     name='trell-data-pipeline',
-    version='0.1',
+    version=__version__,
     description='Pipes various ingress streams to another egress stream. I.e. MQTT -> Kafka',
     packages=find_packages(exclude=['test', 'test.*']),
     url = 'https://github.com/frisellcpl/trell-data-pipeline',
