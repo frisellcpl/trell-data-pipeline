@@ -1,5 +1,6 @@
 # system config
 LOG_DIR = None
+LOG_LEVEL = 'DEBUG'
 
 # LoRa server settings
 LORA_MQTT_TOPICS = None

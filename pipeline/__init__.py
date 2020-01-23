@@ -37,7 +37,7 @@ def init_logging() -> None:
 
     # root logger
     root = logging.getLogger()
-    root.setLevel(logging.DEBUG)
+    root.setLevel(settings.LOG_LEVEL)
 
     # console output
     stdout = logging.StreamHandler(stream=sys.stdout)
