@@ -36,6 +36,8 @@ def _on_subscribe(client, mid, qos):
 class MQTTClient(Client):
     def __init__(
             self,
+            username: str=None,
+            password: str=None,
             connected: bool=False,
             on_connect: Callable=None,
             on_message: Callable=None,
@@ -43,6 +45,9 @@ class MQTTClient(Client):
             on_subscribe: Callable=None,
     ) -> None:        
         super().__init__(None)
+
+        if not username is None:
+            self.set_auth_credentials(username, password)
         
         self.producer = get_producer()
         self.connected = connected
