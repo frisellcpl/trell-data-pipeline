@@ -12,8 +12,7 @@ log = logging.getLogger(__name__)
 
 class Producer():
     def __init__(self):
-        self.uri = settings.PRODUCER_URI
-        self.port = settings.PRODUCER_PORT
+        self.hosts = settings.PRODUCER_HOSTS
         self.topic = settings.PRODUCER_TOPIC
         self.producer = None
         self.connected = False
@@ -50,7 +49,7 @@ class KafkaProducer(Producer):
         log.debug('Connecting to Kafka stream.')
         self.producer = AIOKafkaProducer(
             loop=self.loop,
-            bootstrap_servers='{uri}:{port}'.format(uri=self.uri, port=self.port)
+            bootstrap_servers=self.hosts
         )
         await self.producer.start()
         self.connected = True
