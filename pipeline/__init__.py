@@ -1,4 +1,4 @@
-__version__ = '0.2.2'
+__version__ = '0.2.4'
 
 import asyncio
 from typing import Optional
@@ -76,10 +76,6 @@ def init_logging() -> None:
     # disable gmqtt debug log
     gmqtt_logger = logging.getLogger('gmqtt')
     gmqtt_logger.setLevel(logging.WARNING)
-
-    # disable transitions debug log
-    transitions_logger = logging.getLogger('transitions')
-    transitions_logger.setLevel(logging.WARNING)
 
     # disable aiokafka debug log
     aiokafka_logger = logging.getLogger('aiokafka')
