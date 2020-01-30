@@ -4,7 +4,7 @@ import logging
 
 from abc import ABC
 
-log = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
 INDOOR_SENSOR = 'indoor_sensor'
@@ -12,27 +12,40 @@ DOOR_LOCK_SENSOR = 'door_lock_sensor'
 
 
 class Decoder(ABC):
+    ''' Base class for decoders. Abstact. '''
     def __init__(self, data):
         self.raw = data
         self.data = None
-        
+
     async def decode(self):
-        return {k: v for k,v in self.raw}
+        '''
+        Decodes the raw data passed to the constructor.
+        Override this method with the custom decoder requirements for specific needs.
+        '''
+        return {k: v for k, v in self.raw}
 
     async def is_valid(self):
-        self.data = await self.decode()            
+        '''
+        Initializes the decoding and returns the decoded data.
+        Yo should use this method prior to accessing the data of your decoder and
+        verify that it yields a positive result.
+        '''
+
+        self.data = await self.decode()
 
         if self.data:
             return True
-            
+
         return False
 
     @property
     def sensor_type(self):
+        ''' Optionally set a sensor type for your decoder. '''
         pass
 
-    
+
 class SensitiviaDecoder(Decoder):
+    ''' Decoder for sensitivia sensors. '''
     key_map = {
         'Battery': 'b',
         'AvgTemperature': 't',
@@ -45,44 +58,46 @@ class SensitiviaDecoder(Decoder):
 
     async def decode(self):
         data = {}
-        
-        for k,v in self.raw:
+
+        for k, v in self.raw:
             try:
                 data[self.key_map[k]] = v
             except KeyError:
                 continue
-            
+
         return data
 
     async def is_valid(self):
         return await super().is_valid()
-    
+
     @property
     def sensor_type(self):
         return INDOOR_SENSOR
 
 
 class DoorLockDecoder(Decoder):
+    ''' Decoder for door lock sensors. '''
     async def decode(self):
         data = super().decode()
 
-        o = data.get('DI1', None)
-        l = data.get('DI2', None)
+        open_state = data.get('DI1', None)
+        locked_state = data.get('DI2', None)
 
         return {
-            'open': None if o is None else o == 0,
-            'locked': None if l is None else l == 0,
+            'open': None if open_state is None else open_state == 0,
+            'locked': None if locked_state is None else locked_state == 0,
         }
 
     async def is_valid(self):
         return await super().is_valid()
-    
+
     @property
     def sensor_type(self):
         return DOOR_LOCK_SENSOR
 
 
 class ElsysDecoder(Decoder):
+    ''' Decoder used to decode all sensor types from Elsys '''
     TYPE_TEMP = 0x01  # Temp 2 bytes -3276. -->
     TYPE_RH = 0x02  # Humidity 1 byte  0-100%
     TYPE_ACC = 0x03  # Acceleration 3 bytes X,Y,Z -128 --> 127 +/-63=1G
@@ -108,19 +123,19 @@ class ElsysDecoder(Decoder):
     TYPE_PULSE2_ABS = 0x17  # 4bytes no 0->0xFFFFFFFF
     TYPE_ANALOG2 = 0x18  # 2bytes voltage in mV
     TYPE_EXT_TEMP2 = 0x19
-                    
+
     async def is_valid(self):
-        try:            
-            self.data = await self.decode()            
+        try:
+            self.data = await self.decode()
 
             if self.data:
                 return True
-            
+
         except IndexError:
             return False # TODO: reraise a better error message and handle in caller.
 
         return False
-    
+
     @property
     def sensor_type(self):
         return INDOOR_SENSOR
@@ -174,17 +189,17 @@ class ElsysDecoder(Decoder):
                 obj['am'] = data[i+1]
                 i += 1
             elif data[i] == self.TYPE_IR_TEMP:
-                it = int(data[i+1] << 8 | data[i+2])
-                if it > 0x7FFF:
-                    it -= 0x10000
+                internal_temp = int(data[i+1] << 8 | data[i+2])
+                if internal_temp > 0x7FFF:
+                    internal_temp -= 0x10000
 
-                et = int(data[i+3] << 8 | data[i+4])
-                if et > 0x7FFF:
-                    et -= 0x10000
+                external_temp = int(data[i+3] << 8 | data[i+4])
+                if external_temp > 0x7FFF:
+                    external_temp -= 0x10000
 
-                obj['irit'] = it/10
-                obj['iret'] = et/10
-                
+                obj['irit'] = internal_temp/10
+                obj['iret'] = external_temp/10
+
                 i += 4
             elif data[i] == self.TYPE_OCCUPANCY:
                 obj['o'] = data[i+1]
@@ -209,21 +224,19 @@ class ElsysDecoder(Decoder):
             elif data[i] == self.TYPE_EXT_TEMP2:
                 i += 2
             else:
-                log.error('Couldnt decode hex, at pos {i} value {v}'.format(
-                    i=i,
-                    v=data[i],
-                ))
+                LOG.error('Couldnt decode hex, at pos %s value %s', i, data[i])
                 i = len(data)
             i = i+1
-            
+
         return obj
 
 
-class AdvantechElsysDecoder(ElsysDecoder):        
+class AdvantechElsysDecoder(ElsysDecoder):
+    ''' Decodes elsys data comming from Advantech Wise-PaaS. '''
     async def decode(self):
         data = {}
-        
-        for k,v in self.raw:
+
+        for k, v in self.raw:
             if k == 'hex':
                 data.update(await self._decode_hex(
                     data=bytes.fromhex(v)
@@ -231,15 +244,16 @@ class AdvantechElsysDecoder(ElsysDecoder):
             else:
                 data[k] = v
 
-        log.debug('Decoded {d} from {r}'.format(d=data, r=self.raw))
+        LOG.debug('Decoded %s from %s', data, self.raw)
         return data
 
 
 class ChirpElsysDecoder(ElsysDecoder):
+    ''' Decodes elsys data comming from a Chirpstack server. '''
     async def decode(self):
         data = await self._decode_hex(
             data=base64.b64decode(self.raw)
         )
-        
-        log.debug('Decoded {d} from {r}'.format(d=data, r=self.raw))
+
+        LOG.debug('Decoded %s from %s', data, self.raw)
         return data

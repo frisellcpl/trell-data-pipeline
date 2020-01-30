@@ -1,19 +1,20 @@
-import asyncio
 import logging
 import json
 
 from aiokafka import AIOKafkaProducer
 
-from pipeline import settings
 from .base import Producer
 
 
-log = logging.getLogger(__name__)
+LOG = logging.getLogger(__name__)
 
 
 class KafkaProducer(Producer):
+    '''
+    Connects to a kafka cluster and roduces messages as an encoded JSON structure.
+    '''
     async def connect(self) -> None:
-        log.debug('Connecting to Kafka stream.')
+        LOG.debug('Connecting to Kafka stream.')
         self.producer = AIOKafkaProducer(
             loop=self.loop,
             bootstrap_servers=self.hosts
@@ -25,11 +26,11 @@ class KafkaProducer(Producer):
         await self.producer.stop()
         self.connected = False
 
-    async def produce_message(self, message: dict, topic: str=None) -> None:
-        log.debug('Trying to produce message: {msg}'.format(msg=message))
+    async def produce_message(self, message: dict, topic: str = None) -> None:
+        LOG.debug('Trying to produce message: %s', message)
 
         if not self.connected:
-            log.debug('Producer not connected')
+            LOG.debug('Producer not connected')
             return
 
         await super().produce_message(message=message, topic=topic)

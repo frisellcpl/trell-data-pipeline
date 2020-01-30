@@ -7,21 +7,22 @@ from pipeline.types import T
 
 
 class ValidationError(Exception):
+    ''' Specific error for validation exceptions '''
     pass
 
-
 class Arg:
+    ''' An argument passed to the CLI '''
     def __init__(
-        self,
-        name: str,
-        data_type: str,
-        ensure_exists: Optional[bool]=False,
-        argparse_name: Optional[str]=None,
-        argparse_dest: Optional[str]=None,
-        argparse_action: Optional[str]=None,
-        envvar: Optional[str]=None,
-        required: bool=False,
-        default: Optional[T]=None,
+            self,
+            name: str,
+            data_type: str,
+            ensure_exists: Optional[bool] = False,
+            argparse_name: Optional[str] = None,
+            argparse_dest: Optional[str] = None,
+            argparse_action: Optional[str] = None,
+            envvar: Optional[str] = None,
+            required: bool = False,
+            default: Optional[T] = None,
     ):
         self.name = name
         self.data_type = data_type
@@ -66,6 +67,7 @@ class Arg:
 
 
 def parse_args(args: List[Arg]) -> Dict[str, T]:
+    ''' Parses args and returns a dict of settings. '''
     results = {}
 
     # use argparse to parse cli args
@@ -123,8 +125,8 @@ def parse_args(args: List[Arg]) -> Dict[str, T]:
         # if data_type is path and ensure_exists is true, ensure path exists
         if value is not None and arg.data_type == 'path' and arg.ensure_exists:
             if any([
-                arg.ensure_exists == 'file' and not value.is_file(),
-                arg.ensure_exists == 'dir' and not value.is_dir(),
+                    arg.ensure_exists == 'file' and not value.is_file(),
+                    arg.ensure_exists == 'dir' and not value.is_dir(),
             ]):
                 raise ValidationError(
                     'Path does not exist: {name}={value}'.format(

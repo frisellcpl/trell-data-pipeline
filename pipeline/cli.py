@@ -2,6 +2,7 @@ import sys
 import logging
 
 import pipeline
+from pipeline.main import main
 from pipeline import settings, init_logging
 from pipeline.config import load_config_file, ConfigLoadError
 from pipeline.cli_args import (
@@ -11,7 +12,7 @@ from pipeline.cli_args import (
 )
 
 
-args = [
+ARGS = [
     Arg(
         name='config_file',
         data_type='path',
@@ -22,6 +23,7 @@ args = [
 
 
 def eprint(*args, **kwargs):
+    ''' Pretty print format for error messages. '''
     print(*args, file=sys.stderr, **kwargs)
 
 
@@ -31,12 +33,10 @@ def cli(task) -> None:
     Use sys.exit to terminate program.
     """
 
-    # parse cli args
-
     try:
-        parsed_args = parse_args(args)
-    except ValidationError as e:
-        eprint('Argument error: {msg}'.format(msg=e))
+        parsed_args = parse_args(ARGS)
+    except ValidationError as exception:
+        eprint('Argument error: {msg}'.format(msg=exception))
         sys.exit(1)
 
     # load config file
@@ -50,8 +50,8 @@ def cli(task) -> None:
             if hasattr(settings, name):
                 setattr(settings, name, value)
 
-    except ConfigLoadError as e:
-        eprint('No config file loaded: {msg}, going for default. God bless.'.format(msg=e))
+    except ConfigLoadError as exception:
+        eprint('No config file loaded: {msg}, going for default. God bless.'.format(msg=exception))
 
     # init logging
     init_logging()
@@ -60,12 +60,9 @@ def cli(task) -> None:
     log = logging.getLogger(__name__)
 
     # log program info
-    log.info('Trell Data Pipeline commencing: version={version}'.format(
-        version=pipeline.__version__
-    ))
+    log.info('Trell Data Pipeline commencing: version=%s', pipeline.__version__)
 
     # run main program
-    from pipeline.main import main
     main(task)
     # main(task, args)
     sys.exit(0)
