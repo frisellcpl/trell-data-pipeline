@@ -1,4 +1,5 @@
 from pipeline import settings
+from .base import Producer
 from .kafka import KafkaProducer
 from .mock import MockProducer
 
