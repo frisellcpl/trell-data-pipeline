@@ -15,5 +15,5 @@ class MockProducer(Producer):
     async def disconnect(self) -> None:
         self.connected = False
 
-    async def produce_message(self, data: dict, target: str = None) -> None:
+    async def produce_data(self, data: dict, target: str = None) -> None:
         LOG.debug('Mocking a message on topic %s: %s', data, target)

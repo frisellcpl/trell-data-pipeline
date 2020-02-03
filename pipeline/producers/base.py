@@ -20,7 +20,7 @@ class Producer():
         ''' Disconnect from producer destination '''
         raise NotImplementedError("No driver specified")
 
-    async def produce_message(self, data: dict, target: str = None) -> None:
+    async def produce_data(self, data: dict, target: str = None) -> None:
         ''' Override this method to produce data to specific producer destination, which we randomly call target. '''
         if not target:
             target = settings.PRODUCER_TARGET
