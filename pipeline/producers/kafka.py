@@ -26,7 +26,7 @@ class KafkaProducer(Producer):
         await self.producer.stop()
         self.connected = False
 
-    async def produce_message(self, message: dict, topic: str = None) -> None:
+    async def produce_message(self, data: dict, target: str = None) -> None:
         LOG.debug('Trying to produce message: %s', message)
 
         if not self.connected:
@@ -34,4 +34,4 @@ class KafkaProducer(Producer):
             return
 
         await super().produce_message(message=message, topic=topic)
-        await self.producer.send_and_wait(topic, json.dumps(message).encode())
+        await self.producer.send_and_wait(target, json.dumps(data).encode())

@@ -55,11 +55,11 @@ class MQTTClient(Client):
         self.on_disconnect = on_disconnect or _on_disconnect
         self.on_subscribe = on_subscribe or _on_subscribe
 
-    async def pipe_message(self, message: str, topic: str) -> None:
+    async def pipe_message(self, data: dict, target: str) -> None:
         ''' Pipes mesage to configured producer. '''
         await self.producer.produce_message(
-            message=message,
-            topic=topic,
+            data=data,
+            target=target,
         )
 
     async def connect(self, uri: str, topics: Tuple[str, int]) -> None:
