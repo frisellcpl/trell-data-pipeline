@@ -13,12 +13,15 @@ class KafkaProducer(Producer):
     '''
     Connects to a kafka cluster and roduces messages as an encoded JSON structure.
     '''
-    async def connect(self) -> None:
-        LOG.debug('Connecting to Kafka stream.')
+    async def _setup(self) -> None:
+        await super()._setup()
         self.producer = AIOKafkaProducer(
             loop=self.loop,
             bootstrap_servers=self.hosts
         )
+
+    async def connect(self) -> None:
+        LOG.debug('Connecting to Kafka stream.')
         await self.producer.start()
         self.connected = True
 
@@ -27,7 +30,7 @@ class KafkaProducer(Producer):
         self.connected = False
 
     async def produce_data(self, data: dict, target: str = None) -> None:
-        LOG.debug('Trying to produce message: %s', message)
+        LOG.debug('Trying to produce data: %s', data)
 
         if not self.connected:
             LOG.debug('Producer not connected')
