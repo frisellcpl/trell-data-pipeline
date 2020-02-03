@@ -33,5 +33,5 @@ class KafkaProducer(Producer):
             LOG.debug('Producer not connected')
             return
 
-        await super().produce_message(message=message, topic=topic)
+        await super().produce_message(data=data, target=target)
         await self.producer.send_and_wait(target, json.dumps(data).encode())

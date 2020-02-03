@@ -7,7 +7,7 @@ class Producer():
     ''' Base class for producers. '''
     def __init__(self):
         self.hosts = settings.PRODUCER_HOSTS
-        self.topic = settings.PRODUCER_TOPIC
+        self.target = settings.PRODUCER_TARGET
         self.producer = None
         self.connected = False
         self.loop = asyncio.get_event_loop()
@@ -20,7 +20,7 @@ class Producer():
         ''' Disconnect from producer destination '''
         raise NotImplementedError("No driver specified")
 
-    async def produce_message(self, message: dict, topic: str = None) -> None:
-        ''' Override this method to produce messages to specific producer destination. '''
-        if not topic:
-            topic = settings.PRODUCER_TOPIC
+    async def produce_message(self, data: dict, target: str = None) -> None:
+        ''' Override this method to produce data to specific producer destination, which we randomly call target. '''
+        if not target:
+            target = settings.PRODUCER_TARGET
