@@ -14,7 +14,7 @@ def _on_connect(client, *args, **kwargs):
     LOG.debug('%s: CONNECTED', client._client_id)
 
 
-async def _on_message(msg, *args, **kwargs):
+async def _on_message(client, msg, *args, **kwargs):
     LOG.debug('RECV: %s', msg)
 
 
