@@ -44,14 +44,15 @@ class Client:
         self.password = password
         self.connected = connected
 
-        self.producer = get_producer()
-
         self.on_connect = on_connect
         self.on_message = on_message
         self.on_disconnect = on_disconnect
         self.on_subscribe = on_subscribe
 
         self.loop = asyncio.get_event_loop()
+
+    async def _setup(self):
+        self.producer = await get_producer()
 
     async def pipe_message(self, data: dict, target: str) -> None:
         ''' Pipes mesage to configured producer. '''
