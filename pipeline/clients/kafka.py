@@ -5,23 +5,23 @@ from typing import (
 )
 from aiokafka import AIOKafkaConsumer
 
-from .base import Consumer
+from .base import Client
 
 
 LOG = logging.getLogger(__name__)
 
-class KafkaClient(Consumer):
+class KafkaClient(Client):
     ''' Client for consuming records from a Kafka topic and
     pipe it to configured producer. '''
     def __init__(
             self,
             group_id: str,
-            hosts: List[str],
             **kwargs: Any,
     ):
         super().__init__(**kwargs)
+        self.consumer = None
         self.group_id = group_id
-        self.hosts = hosts
+        self.hosts = self.uri.split(',')
 
     async def connect(self, topics: List) -> None:
         self.consumer = AIOKafkaConsumer(

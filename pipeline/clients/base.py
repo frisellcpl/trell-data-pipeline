@@ -1,10 +1,7 @@
 import logging
 import asyncio
-import json
 from typing import (
     Callable,
-    Tuple,
-    Any,
     List,
 )
 from pipeline.producers import get_producer
@@ -29,24 +26,30 @@ def _on_subscribe(client, topics, **kwargs):
     LOG.debug('%s: SUBSCRIBED TO: %s', client._client_id, topics)
 
 
-class Consumer:
+class Client:
     ''' Base class for consumers.'''
     def __init__(
             self,
-            on_connect: Callable = None,
-            on_message: Callable = None,
-            on_disconnect: Callable = None,
-            on_subscribe: Callable = None,
+            uri: str,
+            username: str = None,
+            password: str = None,
+            connected: bool = False,
+            on_connect: Callable = _on_connect,
+            on_message: Callable = _on_message,
+            on_disconnect: Callable = _on_disconnect,
+            on_subscribe: Callable = _on_subscribe,
     ):
-        self.consumer = None
-        self.connected = False
+        self.uri = uri
+        self.username = username
+        self.password = password
+        self.connected = connected
 
         self.producer = get_producer()
 
-        self.on_connect = on_connect or _on_connect
-        self.on_message = on_message or _on_message
-        self.on_disconnect = on_disconnect or _on_disconnect
-        self.on_subscribe = on_subscribe or _on_subscribe
+        self.on_connect = on_connect
+        self.on_message = on_message
+        self.on_disconnect = on_disconnect
+        self.on_subscribe = on_subscribe
 
         self.loop = asyncio.get_event_loop()
 
