@@ -22,7 +22,7 @@ def _on_disconnect(client, *args, **kwargs):
     LOG.debug('%s: DISCONNECTED', client._client_id)
 
 
-def _on_subscribe(client, **kwargs):
+def _on_subscribe(client, *args, **kwargs):
     LOG.debug('%s: SUBSCRIBED TO TOPICS.', client._client_id)
 
 
