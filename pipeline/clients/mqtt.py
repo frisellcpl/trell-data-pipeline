@@ -23,6 +23,11 @@ class MQTTClient(Client):
         super().__init__(**kwargs)
         self._inner_client = GMQTTClient(None)
 
+        self._inner_client.on_connect = self.on_connect
+        self._inner_client.on_message = self.on_message
+        self._inner_client.on_disconnect = self.on_disconnect
+        self._inner_client.on_subscribe = self.on_subscribe
+
         if not self.username is None:
             self._inner_client.set_auth_credentials(self.username, self.password)
 
@@ -32,10 +37,11 @@ class MQTTClient(Client):
         LOG.debug('Connecting to MQTT broker.')
         try:
             await self._inner_client.connect(self.uri, 1883, keepalive=60, version=MQTTv311)
-            await self.producer.connect()
-
             subscriptions = [Subscription(t[0], qos=t[1]) for t in topics]
             self._inner_client.subscribe(subscriptions, subscription_identifier=1)
+
+            await self.producer.connect()
+
             self.connected = True
         except:
             self.connected = False
