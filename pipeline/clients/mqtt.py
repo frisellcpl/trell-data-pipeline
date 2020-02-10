@@ -27,6 +27,7 @@ class MQTTClient(Client):
         self._inner_client.on_message = self.on_message
         self._inner_client.on_disconnect = self.on_disconnect
         self._inner_client.on_subscribe = self.on_subscribe
+        self._inner_client.pipe_message = self.pipe_message
 
         if not self.username is None:
             self._inner_client.set_auth_credentials(self.username, self.password)
