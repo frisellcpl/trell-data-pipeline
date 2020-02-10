@@ -2,12 +2,14 @@
 LOG_DIR = None
 LOG_LEVEL = 'DEBUG'
 
+# Client settings
+CLIENT_TARGETS = None
+CLIENT_URI = None
+CLIENT_USERNAME = None
+CLIENT_PASSWORD = None
+
 # LoRa server settings
-LORA_MQTT_TOPICS = None
-LORA_MQTT_URI = None
 LORA_DRIVER = None
-LORA_MQTT_USERNAME = None
-LORA_MQTT_PASSWORD = None
 
 # Producer settings
 PRODUCER_DRIVER = None
