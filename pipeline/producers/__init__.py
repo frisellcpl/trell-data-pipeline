@@ -15,7 +15,7 @@ async def create_producer(cls: Producer) -> Producer:
     return producer
 
 
-def get_producer() -> Producer:
+async def get_producer() -> Producer:
     ''' Returns chosen producer based applied config '''
     if settings.PRODUCER_DRIVER == 'kafka':
         return await create_producer(KafkaProducer)
