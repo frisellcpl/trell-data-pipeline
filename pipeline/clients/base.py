@@ -22,8 +22,8 @@ def _on_disconnect(client, *args, **kwargs):
     LOG.debug('%s: DISCONNECTED', client._client_id)
 
 
-def _on_subscribe(client, topics, **kwargs):
-    LOG.debug('%s: SUBSCRIBED TO: %s', client._client_id, topics)
+def _on_subscribe(client, **kwargs):
+    LOG.debug('%s: SUBSCRIBED TO TOPICS.', client._client_id)
 
 
 class Client:
