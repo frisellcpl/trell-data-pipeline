@@ -26,9 +26,6 @@ def load_config_file(config_file: Path) -> Dict[str, T]:
         config = yaml.load(file)
         file.close()
 
-        if isinstance(config, dict):
-            raise TypeError('Config must be a map at root level.')
-
     except IOError as exception:
         raise ConfigLoadError(
             'Failed opening config file: {msg}.'.format(msg=exception)
