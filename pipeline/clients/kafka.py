@@ -10,6 +10,10 @@ from .base import Client
 
 LOG = logging.getLogger(__name__)
 
+def _on_subscribe(client, topics, **kwargs):
+    LOG.debug('%s: SUBSCRIBED TO TOPICS: %s', client._client_id, topics)
+
+
 class KafkaClient(Client):
     ''' Client for consuming records from a Kafka topic and
     pipe it to configured producer. '''
@@ -18,7 +22,7 @@ class KafkaClient(Client):
             group_id: str,
             **kwargs: Any,
     ):
-        super().__init__(**kwargs)
+        super().__init__(on_subscribe=_on_subscribe, **kwargs)
         self.consumer = None
         self.group_id = group_id
         self.hosts = self.uri.split(',')
