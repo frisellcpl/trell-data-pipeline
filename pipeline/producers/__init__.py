@@ -18,9 +18,9 @@ async def create_producer(cls: Producer) -> Producer:
 def get_producer() -> Producer:
     ''' Returns chosen producer based applied config '''
     if settings.PRODUCER_DRIVER == 'kafka':
-        return create_producer(KafkaProducer)
+        return await create_producer(KafkaProducer)
 
     if settings.PRODUCER_DRIVER == 'timescale':
-        return create_producer(TimescaleProducer)
+        return await create_producer(TimescaleProducer)
 
-    return create_producer(MockProducer)
+    return await create_producer(MockProducer)
