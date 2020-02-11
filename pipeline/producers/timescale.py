@@ -1,5 +1,4 @@
 import logging
-import asyncio
 
 from asyncpg import create_pool
 
@@ -39,12 +38,6 @@ class TimescaleProducer(Producer):
         '''
         Produces the values in the passed data dict in corresponding given order.
         '''
-        await super().produce_data(data=data, target=target)
         async with self.pool.acquire() as connection:
             async with connection.transaction():
-                await connection.execute(
-                    'INSERT INTO {table}({cols}) VALUES({vals})'.format(
-                        table=target,
-                        cols=','.join(str(i) for i in data.keys()),
-                        vals=','.join(str(i) for i in data.values()),
-                    ))
+                await connection.execute(data)
