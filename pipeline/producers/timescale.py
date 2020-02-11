@@ -43,7 +43,8 @@ class TimescaleProducer(Producer):
         async with self.pool.acquire() as connection:
             async with connection.transaction():
                 await connection.execute(
-                    'INSERT INTO {table} VALUES({values})'.format(
+                    'INSERT INTO {table}({cols}) VALUES({vals})'.format(
                         table=target,
-                        values=','.join(str(i) for i in data.values())
+                        cols=','.join(str(i) for i in data.keys()),
+                        vals=','.join(str(i) for i in data.values()),
                     ))
