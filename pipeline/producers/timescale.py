@@ -107,13 +107,15 @@ class TimescaleProducer(Producer):
         '''
         Stores data into configured database and target table.
         Depending on the target it formats the data according to a scheme.
-        If no scheme can be applied it throws an exception. TODO: Add custom error.
+        If no scheme can be applied it raises an validation error.
         '''
+
+        await super().produce_data(data=data, target=target)
 
         data_schema = await _extract_schema(data=data)
         query = await _build_query(
             data=data,
-            target=target,
+            target=self.target,
             data_schema=data_schema,
         )
 

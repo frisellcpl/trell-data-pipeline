@@ -36,5 +36,5 @@ class Producer():
         Override this method to produce data to specific producer destination,
         which we randomly call target.
         '''
-        if not target:
-            target = settings.PRODUCER_TARGET
+        if not target is None:
+            self.target = target

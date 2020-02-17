@@ -37,4 +37,4 @@ class KafkaProducer(Producer):
             return
 
         await super().produce_data(data=data, target=target)
-        await self.producer.send_and_wait(target, json.dumps(data).encode())
+        await self.producer.send_and_wait(self.target, json.dumps(data).encode())
