@@ -16,6 +16,7 @@ setup(
         'asyncpg==0.20.1',
         'PyYAML==5.3',
         'gmqtt==0.5.5',
+        'jsonschema==3.2.0',
     ],
     classifiers = [
         'Intended Audience :: Developers',
