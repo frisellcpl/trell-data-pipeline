@@ -1,5 +1,6 @@
 import logging
 import asyncio
+import time
 from typing import List, Callable
 
 from .base import Client
@@ -11,8 +12,8 @@ LOG = logging.getLogger(__name__)
 class MockClient(Client):
     async def _produce_mock_messages(self):
         data = {
-            'ts': 1581412003,
-            'id': 'abc123',
+            'ts': int(time.time()),
+            'id': 'a81758fffe048c45',
             't': 21.3,
             'h': 42.1,
             'b': 3021,
