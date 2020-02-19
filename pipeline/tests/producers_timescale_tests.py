@@ -112,24 +112,3 @@ async def test_build_indoor_data_query():
     assert query == "INSERT INTO trell_office_indoor_data(t,h,l,m,c,b,id,ts)" \
         "VALUES(21.3,42.1,15,1,551.32,3021,'abc123','2020-02-11 10:06:43')"
     
-
-# @pytest.mark.skip
-# @pytest.mark.asyncio
-# async def test_map_value():
-#     epoch_to_datetime = await _map_value(value=1581412003, value_type='timestamptz')
-#     assert datetime(2020, 2, 11, 10, 6, 43) == epoch_to_datetime
-
-#     str_to_text = await _map_value(value="abc123", value_type='text')
-#     assert "'abc123'" == str_to_text
-
-
-# @pytest.mark.skip
-# @pytest.mark.asyncio
-# async def test_map_values():
-#     values = [
-#         (25.1, 'double'),
-#         ('abc123', 'text'),
-#         (1581412003, 'timestamptz')
-#     ]
-#     res = await _map_values(values=values)
-#     assert datetime(2020, 2, 11, 10, 6, 43) == epoch_to_datetime
