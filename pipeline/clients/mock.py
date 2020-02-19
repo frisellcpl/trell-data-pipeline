@@ -23,7 +23,7 @@ class MockClient(Client):
 
         while self.connected:
             await self.on_message(self, data)
-            asyncio.sleep(5)
+            await asyncio.sleep(5)
 
     async def connect(self, topics: List) -> None:
         self.connected = True
