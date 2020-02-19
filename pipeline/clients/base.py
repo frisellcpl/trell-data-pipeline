@@ -53,6 +53,7 @@ class Client:
 
     async def _setup(self):
         self.producer = await get_producer()
+        await self.producer.connect()
 
     async def pipe_message(self, data: dict, target: str = None) -> None:
         ''' Pipes mesage to configured producer. '''
