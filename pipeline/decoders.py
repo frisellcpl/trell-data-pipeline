@@ -78,7 +78,7 @@ class SensitiviaDecoder(Decoder):
 class DoorLockDecoder(Decoder):
     ''' Decoder for door lock sensors. '''
     async def decode(self):
-        data = super().decode()
+        data = await super().decode()
 
         open_state = data.get('DI1', None)
         locked_state = data.get('DI2', None)
