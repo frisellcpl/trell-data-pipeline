@@ -39,6 +39,7 @@ class MockDataGenerator():
 
     async def refresh(self):
         for d in self.data:
+            d['ts'] = int(time.time())
             d['t'] += round(random.uniform(-0.05, 0.05), 2)
             d['h'] += round(random.uniform(-0.05, 0.05), 2)
             d['c'] += round(random.uniform(-2, 2), 0)
