@@ -23,7 +23,7 @@ def load_config_file(config_file: Path) -> Dict[str, T]:
 
     try:
         file = open(str(config_file), 'r')
-        config = yaml.load(file)
+        config = yaml.load(file, Loader=yaml.FullLoader)
         file.close()
 
     except IOError as exception:
