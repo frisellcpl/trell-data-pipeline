@@ -41,6 +41,15 @@ SCHEMAS = [
                 "l": {
                     "type": ["number", "null"],
                 },
+                "w": {
+                    "type": ["number", "null"],
+                },
+                "open": {
+                    "type": ["boolean", "null"],
+                },
+                "locked": {
+                    "type": ["boolean", "null"],
+                },
             },
             "required": ["ts", "id"],
         }
@@ -63,15 +72,18 @@ async def _extract_schema(data: dict) -> str:
 async def _build_query(data: dict, target: str, data_schema: str) -> str:
     ''' Builds a database query based on provided data, target and extracted schema. '''
     if data_schema == 'indoor_data':
-        return "INSERT INTO {target}(t,h,l,m,c,b,id,ts)" \
-            "VALUES({t},{h},{l},{m},{c},{b},'{id}','{ts}')".format(
+        return "INSERT INTO {target}(t,h,l,m,c,b,w,open,locked,id,ts)" \
+            "VALUES({t},{h},{l},{m},{c},{b},{w},{opn},{lck},'{id}','{ts}')".format(
                 target=target,
-                t=data.get('t', None),
-                h=data.get('h', None),
-                l=data.get('l', None),
-                m=data.get('m', None),
-                c=data.get('c', None),
-                b=data.get('b', None),
+                t=data.get('t', 'null'),
+                h=data.get('h', 'null'),
+                l=data.get('l', 'null'),
+                m=data.get('m', 'null'),
+                c=data.get('c', 'null'),
+                b=data.get('b', 'null'),
+                w=data.get('w', 'null'),
+                opn=data.get('open', 'null'),
+                lck=data.get('locked', 'null'),
                 id=data['id'],
                 ts=datetime.fromtimestamp(data['ts']),
             )

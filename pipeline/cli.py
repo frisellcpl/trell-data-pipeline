@@ -1,3 +1,4 @@
+import os
 import sys
 import logging
 
@@ -26,6 +27,16 @@ def eprint(*args, **kwargs):
     ''' Pretty print format for error messages. '''
     print(*args, file=sys.stderr, **kwargs)
 
+    
+def get_val_or_os_environ(value):
+    if isinstance(value, list) or isinstance(value, tuple):
+        return [get_val_or_os_environ(v) for v in value]
+        
+    if isinstance(value, str) and value.startswith('${') and value.endswith('}'):
+        return os.environ[value.strip('${}')]
+
+    return value
+
 
 def cli(task) -> None:
     """
@@ -44,9 +55,14 @@ def cli(task) -> None:
         config_values = load_config_file(
             config_file=parsed_args.get('config_file'),
         )
-
+        
         # set settings from config_values
         for name, value in config_values.items():
+            if isinstance(value, list) or isinstance(value, tuple):
+                value = [get_val_or_os_environ(v) for v in value]
+            if isinstance(value, str):
+                value = get_val_or_os_environ(value)
+
             if hasattr(settings, name):
                 setattr(settings, name, value)
 
