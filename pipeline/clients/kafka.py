@@ -46,7 +46,7 @@ class KafkaClient(Client):
         self.connected = True
 
     async def disconnect(self) -> None:
-        await self.consumer.stop()
         await self.producer.disconnect()
+        await self.consumer.stop()
         self.connected = False
         self.on_disconnect(self.consumer._client)

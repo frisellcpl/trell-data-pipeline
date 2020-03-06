@@ -1,4 +1,4 @@
-__version__ = '0.4.11.5'
+__version__ = '0.4.11'
 
 import asyncio
 from typing import Optional

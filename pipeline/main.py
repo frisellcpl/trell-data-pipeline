@@ -14,6 +14,7 @@ def cancel_all_tasks(loop: asyncio.BaseEventLoop):
         loop=loop,
         return_exceptions=True,
     )
+
     tasks.cancel()
 
 
