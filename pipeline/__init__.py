@@ -1,4 +1,4 @@
-__version__ = '0.4.11'
+__version__ = '0.4.11.5'
 
 import asyncio
 from typing import Optional
@@ -9,9 +9,6 @@ import sys
 from datetime import datetime
 
 from pipeline import settings
-
-
-STOP = asyncio.Event()
 
 
 class DebugOnlyFilter(logging.Filter):

@@ -30,6 +30,8 @@ class KafkaClient(Client):
         self.hosts = self.uri.split(',')
 
     async def connect(self, topics: List) -> None:
+        #TODO: Seems like kafka doesnt listen to stop signal so we need to
+        # send STOP in here and await it. Or move message handlong out to the main function
         self.consumer = AIOKafkaConsumer(
             *topics,
             group_id=self.group_id,
@@ -43,13 +45,8 @@ class KafkaClient(Client):
         self.on_subscribe(self.consumer._client, topics)
         self.connected = True
 
-        try:
-            async for msg in self.consumer:
-                await self.on_message(self, msg) # TODO: A bit wierd syntax, fix.
-        finally:
-            self.disconnect()
-
     async def disconnect(self) -> None:
-        self.consumer.stop()
+        await self.consumer.stop()
+        await self.producer.disconnect()
         self.connected = False
         self.on_disconnect(self.consumer._client)

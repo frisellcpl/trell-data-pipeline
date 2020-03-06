@@ -47,6 +47,11 @@ class MQTTClient(Client):
         except:
             self.connected = False
 
+    async def disconnect(self) -> None:
+        await self._inner_client.disconnect()
+        await self.producer.disconnect()
+        self.connected = False
+
 
 async def serialize(data):
     ''' Decodes recieved data to utf-8 and returns it as a dict. '''

@@ -112,7 +112,7 @@ class TimescaleProducer(Producer):
         self.connected = True
 
     async def disconnect(self) -> None:
-        await self.producer.stop()
+        await self.pool.close()
         self.connected = False
 
     async def produce_data(self, data: dict, target: str = None) -> None:
