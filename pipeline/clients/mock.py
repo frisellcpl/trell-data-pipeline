@@ -5,6 +5,7 @@ import time
 from typing import List, Callable
 
 from .base import Client
+from pipeline import settings
 
 
 LOG = logging.getLogger(__name__)
@@ -53,7 +54,7 @@ class MockClient(Client):
             for data in self.mock_data_generator.data:
                 await self.on_message(self, data)
 
-            await asyncio.sleep(60)
+            await asyncio.sleep(settings.CLIENT_MOCK_INTERVAL)
 
     async def connect(self, topics: List) -> None:
         self.connected = True
