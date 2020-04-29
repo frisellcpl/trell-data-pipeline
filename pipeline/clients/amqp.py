@@ -42,6 +42,7 @@ class AMQPClient(Client):
         self.connection = await aiormq.connect(self.connstring)
 
         channel = await self.connection.channel()
+        await channel.basic_qos(prefetch_count=10)
         queue = await channel.queue_declare(topics, durable=durable)
         
         self.on_connect(self.connection)
