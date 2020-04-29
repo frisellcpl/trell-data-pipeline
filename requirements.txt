@@ -2,3 +2,5 @@ gmqtt
 aiokafka
 pyyaml
 jsonschema
+aiormq
+boto3

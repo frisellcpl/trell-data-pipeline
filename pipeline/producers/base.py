@@ -1,5 +1,6 @@
 import logging
 import asyncio
+from typing import Any
 
 from pipeline import settings
 
@@ -15,6 +16,7 @@ class Producer():
         self.database = settings.PRODUCER_DATABASE
         self.username = settings.PRODUCER_USERNAME
         self.password = settings.PRODUCER_PASSWORD
+        self.region = settings.PRODUCER_REGION
 
         self.producer = None
         self.connected = False
@@ -31,7 +33,7 @@ class Producer():
         ''' Disconnect from producer destination '''
         raise NotImplementedError("No driver specified")
 
-    async def produce_data(self, data: dict, target: str = None) -> None:
+    async def produce_data(self, data: Any, target: str = None) -> None:
         '''
         Override this method to produce data to specific producer destination,
         which we randomly call target.
