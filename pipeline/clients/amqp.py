@@ -2,6 +2,7 @@ import logging
 from typing import (
     List,
     Any,
+    Callable,
 )
 import aiormq
 
