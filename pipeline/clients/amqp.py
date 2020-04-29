@@ -29,7 +29,11 @@ class AMQPClient(Client):
             on_disconnect: Callable = _on_disconnect,
             **kwargs: Any,
     ):
-        super().__init__(**kwargs)
+        super().__init__(
+            on_connect=on_connect,
+            on_disconnect=on_disconnect,
+            **kwargs,
+        )
 
         self.connection = None
         self.channel = None
