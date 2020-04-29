@@ -45,12 +45,11 @@ class AMQPClient(Client):
         self.channel = await self.connection.channel()
 
         for topic in topics:
-            deaclare_ok = await self.channel.queue_declare(topic)
+            deaclare_ok = await self.channel.queue_declare(topic, durable=True)
             consume_ok = await self.channel.basic_consume(
                 deaclare_ok.queue,
                 self.on_message,
                 no_ack=False,
-                durable=True,
             )
         
         self.on_connect(self.connection)
