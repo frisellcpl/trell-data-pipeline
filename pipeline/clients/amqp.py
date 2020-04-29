@@ -39,17 +39,17 @@ class AMQPClient(Client):
         self.channel = None
         self.connstring = f'amqp://{self.username}:{self.password}@{self.uri}'
 
-    async def connect(self, topics: List) -> None:
+    async def connect(self, topics: List, no_ack: bool = True, durable: bool = True) -> None:
         self.connection = await aiormq.connect(self.connstring)
 
         self.channel = await self.connection.channel()
 
         for topic in topics:
-            deaclare_ok = await self.channel.queue_declare(topic, durable=True)
+            deaclare_ok = await self.channel.queue_declare(topic, durable=durable)
             consume_ok = await self.channel.basic_consume(
                 deaclare_ok.queue,
                 self.on_message,
-                no_ack=False,
+                no_ack=no_ack,
             )
         
         self.on_connect(self.connection)
