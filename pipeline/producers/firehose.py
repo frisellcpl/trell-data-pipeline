@@ -18,6 +18,14 @@ class FirehoseProducer(Producer):
         await super()._setup()
         self.client = client('firehose', region_name=self.region)
 
+    async def connect(self) -> None:
+        ''' Connect to producer destination '''
+        LOG.info('Connected.')
+
+    async def disconnect(self) -> None:
+        ''' Disconnect from producer destination '''
+        LOG.info('Disconnected.')
+
     async def produce_data(self, data: bytes, target: str = None) -> None:
         await super().produce_data(data=data, target=target)
         

@@ -17,6 +17,8 @@ setup(
         'PyYAML==5.3',
         'gmqtt==0.5.5',
         'jsonschema==3.2.0',
+        'aiormq==3.2.1',
+        'boto3==1.12.48',
     ],
     classifiers = [
         'Intended Audience :: Developers',
