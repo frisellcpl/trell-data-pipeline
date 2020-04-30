@@ -77,3 +77,11 @@ def init_logging() -> None:
     # disable aiokafka debug log
     aiokafka_logger = logging.getLogger('aiokafka')
     aiokafka_logger.setLevel(logging.WARNING)
+
+    # disable aiormq debug log
+    aiormq_logger = logging.getLogger('aiormq')
+    aiormq_logger.setLevel(logging.WARNING)
+
+    # disable botocore debug log
+    boto_logger = logging.getLogger('botocore')
+    boto_logger.setLevel(logging.WARNING)
