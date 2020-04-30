@@ -32,6 +32,6 @@ def main(task):
         loop.add_signal_handler(value, stop_handler)
 
     LOG.debug('Starting loop.')
-    loop.run_until_complete(task)
+    loop.run_until_complete(task())
     loop.run_forever()
     LOG.debug('Main finished.')
