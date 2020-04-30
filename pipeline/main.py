@@ -42,7 +42,8 @@ def main(task):
         loop.add_signal_handler(value, stop_handler)
 
     LOG.debug('Starting loop.')
-    loop.run_until_complete(task_wrapper(task))
-    loop.run_forever()
+    loop.run_until_complete(asyncio.gather(
+        task_wrapper(task),
+    ))
 
     LOG.debug('Main finished.')
