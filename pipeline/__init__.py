@@ -85,3 +85,7 @@ def init_logging() -> None:
     # disable botocore debug log
     boto_logger = logging.getLogger('botocore')
     boto_logger.setLevel(logging.WARNING)
+
+    # disable urllib3 debug log
+    urllib3_logger = logging.getLogger('urllib3')
+    urllib3_logger.setLevel(logging.WARNING)
