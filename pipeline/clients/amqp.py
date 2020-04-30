@@ -39,7 +39,7 @@ class AMQPClient(Client):
         self.connstring = f'amqp://{self.username}:{self.password}@{self.uri}'
 
     async def _on_message_wrapper(self, message: str) -> None:
-        self.on_message(client=self, message=message)
+        await self.on_message(client=self, message=message)
 
     async def connect(self, topics: str, no_ack: bool = True, durable: bool = True, prefetch_count: int = 10) -> tuple:
         self.connection = await aiormq.connect(self.connstring)
