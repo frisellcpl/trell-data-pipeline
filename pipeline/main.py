@@ -2,7 +2,7 @@ import functools
 import logging
 import asyncio
 import signal
-from typing import Coroutine
+from typing import Coroutine, List
 
 LOG = logging.getLogger(__name__)
 
@@ -28,7 +28,7 @@ async def task_wrapper(task: Coroutine):
         LOG.debug('Timed out: %s. Restarting.', task.__name__)
 
 
-def main(task):
+def main(tasks: List[Coroutine]):
     '''
     Main entry point for a task.
     Adds signal handlers and starts the task.
@@ -42,8 +42,7 @@ def main(task):
         loop.add_signal_handler(value, stop_handler)
 
     LOG.debug('Starting loop.')
-    loop.run_until_complete(asyncio.gather(
-        task_wrapper(task),
-    ))
+    # wrapped_tasks = [task_wrapper(task) for task in tasks]
+    loop.run_until_complete(asyncio.gather(*tasks))
 
     LOG.debug('Main finished.')
