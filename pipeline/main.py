@@ -18,16 +18,6 @@ def cancel_all_tasks(loop: asyncio.BaseEventLoop):
     tasks.cancel()
 
 
-async def task_wrapper(task: Coroutine):
-    ''' Wraps a coroutine as a task and passes the global stop signal to it '''
-    try:
-        await task()
-    except asyncio.CancelledError:
-        LOG.debug('Cancelled: %s', task.__name__)
-    except asyncio.TimeoutError:
-        LOG.debug('Timed out: %s. Restarting.', task.__name__)
-
-
 def main(tasks: List[Coroutine]):
     '''
     Main entry point for a task.
@@ -42,7 +32,9 @@ def main(tasks: List[Coroutine]):
         loop.add_signal_handler(value, stop_handler)
 
     LOG.debug('Starting loop.')
-    # wrapped_tasks = [task_wrapper(task) for task in tasks]
-    loop.run_until_complete(asyncio.gather(*tasks))
+    try:
+        loop.run_until_complete(asyncio.gather(*tasks))
+    except asyncio.CancelledError:
+        LOG.debug('Cancelled tasks. Shutting down.')
 
     LOG.debug('Main finished.')
