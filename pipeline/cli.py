@@ -63,6 +63,9 @@ def cli(task) -> None:
             if isinstance(value, str):
                 value = get_val_or_os_environ(value)
 
+                if value in ['True', 'true', 'yes', 'False', 'false', 'no']:
+                    value = value in ['True', 'true', 'yes']
+
             if hasattr(settings, name):
                 setattr(settings, name, value)
 
