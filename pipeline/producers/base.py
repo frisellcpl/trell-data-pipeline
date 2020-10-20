@@ -17,7 +17,7 @@ class Producer():
         self.username = settings.PRODUCER_USERNAME
         self.password = settings.PRODUCER_PASSWORD
         self.region = settings.PRODUCER_REGION
-
+        self.partition_key = settings.PRODUCER_PARTITION_KEY
         self.producer = None
         self.connected = False
         self.loop = asyncio.get_event_loop()
