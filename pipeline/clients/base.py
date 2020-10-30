@@ -1,3 +1,4 @@
+import re
 import logging
 import asyncio
 from typing import (
@@ -69,7 +70,7 @@ class Client:
 
     async def update_filter_config(self, filter_keys: set, signal_regexp: str = None) -> None:
         self.filter_keys = filter_keys
-        self.signal_regexp = signal_regexp
+        self.signal_regexp = re.compile(signal_regexp)
 
     async def pipe_message(self, data: dict, target: str = None) -> None:
         ''' Pipes mesage to configured producer. '''
