@@ -61,10 +61,15 @@ class Client:
         await self.producer.connect()
 
     async def apply_filter(self, data: Any) -> Any:
-        return await self.filter_func(self.filter_keys, data)
+        return await self.filter_func(
+            filter_keys=self.filter_keys,
+            signal_regexp=self.signal_regexp,
+            data=data,
+        )
 
-    async def update_filter_keys(self, filter_keys: set) -> None:
+    async def update_filter_config(self, filter_keys: set, signal_regexp: str = None) -> None:
         self.filter_keys = filter_keys
+        self.signal_regexp = signal_regexp
 
     async def pipe_message(self, data: dict, target: str = None) -> None:
         ''' Pipes mesage to configured producer. '''
