@@ -19,7 +19,7 @@ def _on_connect(client, *args, **kwargs):
 async def _on_message(client, msg, *args, **kwargs):
     LOG.debug('RECV: %s', msg)
 
-    
+
 def _on_disconnect(client, *args, **kwargs):
     LOG.debug('%s: DISCONNECTED', client._client_id)
 
@@ -71,6 +71,9 @@ class Client:
     async def update_filter_config(self, filter_keys: set, signal_regexp: str = None) -> None:
         self.filter_keys = filter_keys
         self.signal_regexp = re.compile(signal_regexp) if signal_regexp else None
+
+    async def update_producer_target(self, producer_target: str) -> None:
+        self.producer.target = producer_target
 
     async def pipe_message(self, data: dict, target: str = None) -> None:
         ''' Pipes mesage to configured producer. '''
