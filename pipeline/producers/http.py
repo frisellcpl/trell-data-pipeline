@@ -29,5 +29,6 @@ class HttpProducer(Producer):
         await super().produce_data(data=data, target=target)
 
         LOG.debug('Trying to produce data: %s', data)
-        async with ClientSession as session, session.post(target, json=data) as response:
+        url = f'{self.target}/compis/'
+        async with ClientSession() as session, session.post(url, json=data) as response:
             await response.text()
