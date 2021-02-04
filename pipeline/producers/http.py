@@ -1,10 +1,12 @@
-import logging
 import json
+import logging
+import os
 from typing import Any
 
 from aiohttp import ClientSession
 
 from .base import Producer
+from pipeline import settings
 
 
 LOG = logging.getLogger(__name__)
@@ -12,7 +14,7 @@ LOG = logging.getLogger(__name__)
 
 class HttpProducer(Producer):
     '''
-    Connects to a kafka cluster and roduces messages as an encoded JSON structure.
+    Connects to the Compis API and produces messages as encoded JSON.
     '''
     async def _setup(self) -> None:
         await super()._setup()
@@ -30,5 +32,11 @@ class HttpProducer(Producer):
 
         LOG.debug('Trying to produce data: %s', data)
         url = f'{self.target}/compis/'
-        async with ClientSession() as session, session.post(url, json=data) as response:
-            await response.text()
+
+        headers = {
+            'authorization': f'Token {self.password}'
+        }
+
+        async with ClientSession() as session:
+            async with session.post(url, headers=headers, json=data) as response:
+                await response.text()
