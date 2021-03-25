@@ -14,7 +14,7 @@ setup(
     install_requires=[
         'aiokafka==0.5.2',
         'asyncpg==0.20.1',
-        'PyYAML==5.3',
+        'PyYAML==5.4',
         'gmqtt==0.5.5',
         'jsonschema==3.2.0',
         'aiormq==3.2.1',
