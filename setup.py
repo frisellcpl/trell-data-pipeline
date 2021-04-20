@@ -13,7 +13,7 @@ setup(
     include_package_data=True,
     install_requires=[
         'aiokafka==0.5.2',
-        'asyncpg==0.20.1',
+        'asyncpg==0.21.0',
         'PyYAML==5.3',
         'gmqtt==0.5.5',
         'jsonschema==3.2.0',
